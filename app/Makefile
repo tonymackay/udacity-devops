@@ -1,18 +1,8 @@
-# import config.
-# You can change the default config with `make cnf="config_special.env" build`
-cnf ?= config.env
-include $(cnf)
-export $(shell sed 's/=.*//' $(cnf))
 
-# import deploy config
-# You can change the default deploy config with `make cnf="deploy_special.env" release`
-dpl ?= deploy.env
-include $(dpl)
-export $(shell sed 's/=.*//' $(dpl))
-
-# grep the version from the mix file
-VERSION=$(shell ./version.sh)
-
+DOCKER_REPO="viewmodel"
+APP_NAME=$(shell ./helper.sh name)
+VERSION=$(shell ./helper.sh version)
+PORT=$(shell ./helper.sh port)
 
 # HELP
 # This will output the help for each task
@@ -31,14 +21,10 @@ build: ## Build the container
 	docker build -t $(APP_NAME) .
 
 run: ## Run container on port configured in `config.env`
-	docker run -i -t --rm --env-file=./config.env -p=$(PORT):$(PORT) --name="$(APP_NAME)" $(APP_NAME)
-
-up: build run ## Run container on port configured in `config.env` (Alias to run)
+	docker run -i -t --rm -p=$(PORT):$(PORT) --name="$(APP_NAME)" $(APP_NAME)
 
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME); docker rm $(APP_NAME)
-
-release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
 
 # Docker publish
 publish: repo-login publish-latest publish-version ## Publish the `{version}` ans `latest` tagged containers to ECR
@@ -65,11 +51,7 @@ tag-version: ## Generate container `latest` tag
 # HELPERS
 
 # generate script to login to aws docker repo
-CMD_REPOLOGIN := "aws ecr get-login-password"
-ifdef AWS_CLI_REGION
-CMD_REPOLOGIN += " --region $(AWS_CLI_REGION)"
-endif
-CMD_REPOLOGIN += " | docker login --username AWS --password-stdin $(DOCKER_REPO)"
+CMD_REPOLOGIN := "docker login --username $(DOCKER_REPO)"
 
 # login to AWS-ECR
 repo-login: ## Auto login to AWS-ECR unsing aws-cli

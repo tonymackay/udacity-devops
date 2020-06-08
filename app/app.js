@@ -1,7 +1,7 @@
 const express = require('express')
 const yahoo = require('yahoo-finance');
 const app = express()
-const port = 8080
+const port = process.env.PORT || 8081;
 
 app.get('/quote', async (req, res) => {
     var response = []
