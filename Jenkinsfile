@@ -20,11 +20,13 @@ pipeline {
     }
     stage('Publish Docker Image') {
       steps {
-        withDockerRegistry([ credentialsId: "docker-hub", url: "https://registry.hub.docker.com/" ]) {
-          sh '''
-            cd app
-            make publish
-             '''
+        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        // available as an env variable, but will be masked if you try to print it out any which way
+        // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
+        sh '''
+          docker login -u $USERNAME -p $PASSWORD
+          docker push viewmodel/stocks-api:latest
+          '''
         }
       }
     }
