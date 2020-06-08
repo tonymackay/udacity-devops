@@ -12,10 +12,12 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh '''
-          cd app
-          make release
-           '''
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+          sh '''
+            cd app
+            make release
+             '''
+        }
       }
     }
   }
