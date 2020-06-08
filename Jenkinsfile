@@ -25,7 +25,7 @@ pipeline {
         // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
         sh '''
           docker login -u $USERNAME -p $PASSWORD
-          docker push viewmodel/stocks-api:latest
+          docker push stocks-api:latest
           '''
         }
       }
