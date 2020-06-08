@@ -20,7 +20,7 @@ pipeline {
     }
     stage('Publish Docker Image') {
       steps {
-        withDockerRegistry([ credentialsId: "docker-hub", url: "" ]) {
+        withDockerRegistry([ credentialsId: "docker-hub", url: "https://registry.hub.docker.com/" ]) {
           sh '''
             cd app
             make publish
