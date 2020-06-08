@@ -4,11 +4,11 @@ FROM node:latest
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package.json /usr/src/app
+COPY app/package.json /usr/src/app
 RUN npm install
 
 # Copy app files
-COPY app.js /usr/src/app
+COPY app/app.js /usr/src/app
 
 # If you are building your code for production
 RUN npm ci --only=production

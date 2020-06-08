@@ -11,7 +11,7 @@
     "eslint": "^7.2.0"
   },
   "scripts": {
-    "start": "PORT=$(./helper.sh port) node app.js",
+    "start": "node app.js",
     "lint": "./node_modules/.bin/eslint *.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

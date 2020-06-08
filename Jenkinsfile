@@ -13,8 +13,7 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         sh '''
-          cd app
-          make build
+          ./tool build
            '''
       }
     }
@@ -24,8 +23,8 @@ pipeline {
         // available as an env variable, but will be masked if you try to print it out any which way
         // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
         sh '''
-          docker login -u $USERNAME -p $PASSWORD
-          docker push stocks-api:latest
+          ./tool tag
+          ./tool publish
           '''
         }
       }
