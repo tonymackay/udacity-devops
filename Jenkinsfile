@@ -12,7 +12,7 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh "/bin/bash /tool.sh build"
+        sh "/bin/bash tool.sh build"
       }
     }
     stage('Publish Docker Image') {
