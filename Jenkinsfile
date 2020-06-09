@@ -32,7 +32,7 @@ pipeline {
     stage('Set current kubectl context') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-          sh "kubectl config use-context minikube"
+          sh "kubectl config use-context arn:aws:eks:us-east-1:662263256076:cluster/udacity-devops"
         }
       }
     }
