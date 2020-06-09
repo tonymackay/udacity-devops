@@ -53,7 +53,7 @@ pipeline {
       }
     }
   
-    stage('Wait for confirmation') {
+    stage('Confirm traffic switch to green') {
       steps {
         input "Ready to redirect traffic to green?"
       }
@@ -67,7 +67,7 @@ pipeline {
       }
     }
 
-    stage('Wait for confirmation') {
+    stage('Confirm traffic switch back to blue') {
       steps {
         input "Ready to update and redirect back to blue?"
       }
