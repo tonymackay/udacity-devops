@@ -32,6 +32,7 @@ pipeline {
     stage('Set current kubectl context') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+          sh "aws eks update-kubeconfig --name udacity-devops"
           sh "kubectl config use-context arn:aws:eks:us-east-1:662263256076:cluster/udacity-devops"
         }
       }
@@ -40,7 +41,6 @@ pipeline {
     stage('Deploy green container') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-          sh "aws eks update-kubeconfig --name udacity-devops"
           sh "kubectl apply -f k8s/green-controller.yml"
         }
       }
