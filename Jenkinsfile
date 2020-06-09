@@ -44,14 +44,6 @@ pipeline {
         }
       }
     }
-
-    stage('Create service') {
-      steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-          sh "kubectl apply -f k8s/blue-service.yml"
-        }
-      }
-    }
   
     stage('Confirm traffic switch to green') {
       steps {
