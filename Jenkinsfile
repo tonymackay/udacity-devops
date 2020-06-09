@@ -37,14 +37,6 @@ pipeline {
       }
     }
 
-    stage('Deploy blue container') {
-      steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-          sh "kubectl apply -f k8s/blue-controller.yml"
-        }
-      }
-    }
-
     stage('Deploy green container') {
       steps {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
@@ -74,6 +66,28 @@ pipeline {
         }
       }
     }
-    
+
+    stage('Wait for confirmation') {
+      steps {
+        input "Ready to update and redirect back to blue?"
+      }
+    }
+
+    stage('Deploy blue container') {
+      steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+          sh "kubectl apply -f k8s/blue-controller.yml"
+        }
+      }
+    }
+
+    stage('Redirect traffic back to blue service') {
+      steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-secret', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+          sh "kubectl apply -f k8s/blue-service.yml"
+        }
+      }
+    }
+
   }
 }
