@@ -3,7 +3,7 @@ const yahoo = require('yahoo-finance');
 const app = express()
 const port = 8080;
 
-app.get('/quote', async (req, res, fail) => {
+app.get('/quote', async (req, res) => {
     var response = []
     const symbol = req.query.symbol;
 
